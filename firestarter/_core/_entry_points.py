@@ -112,7 +112,9 @@ SOFTWARE
         python_cmd = "python"
         pip_cmd = "pip"
     else:
-        print(f"\n{system()} is not supported. Please use Linux, Windows, or macOS.\n")
+        print(_Labels.ERROR +
+              f"\n{system()} is not supported. Please use Linux, Windows, or macOS.\n"
+              )
         return 1
 
     name = input(_Labels.INIT + "Name of project: ")

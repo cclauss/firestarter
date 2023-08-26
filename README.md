@@ -102,5 +102,3 @@ This project is licensed under the `MIT License`. The full copyright can be foun
 
 ## Attribution
 `firestarter`'s logo is an edited version of the FontAwesome [fire icon](https://fontawesome.com/icons/fire?f=classic&s=solid).
-
-The font used is [Poppins](https://fonts.google.com/specimen/Poppins) (semi-bold).
