@@ -1,0 +1,30 @@
+name: Lint code with Pylint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+  
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install --upgrade -r requirements.txt
+        pip install --upgrade -r dev-requirements.txt    
+    - name: Lint the code with Pylint
+      run: |
+        pylint $(git ls-files '*.py') --rcfile=./.pylintrc

@@ -1,0 +1,24 @@
+name: Greet new users
+
+on: [pull_request_target, issues]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+    - uses: actions/first-interaction@v1.1.1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: |
+                       Welcome to `firestarter`!
+                       Please remember to read the Code of Conduct. Thank you!
+                       When opening an issue, please be as specific as possible.
+                        - Dishant B. (@dishb, the creator)
+        pr-message: |
+                    Welcome to `firestarter`!
+                    Please remember to read the Code of Conduct. Thank you!
+                    When making a PR, make sure to read the CONTRIBUTING.md file.
+                        - Dishant B. (@dishb, the creator)
