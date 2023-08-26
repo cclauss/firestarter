@@ -34,7 +34,7 @@ A cross-platform CLI to help you jump right into developing projects with Python
 - Create boilerplate files + code for a blank project
 - Configure a testing framework
 - Configure a linter
-- Initialize a `git` repository.
+- Initialize a `git` repository
 
 ## Documentation:
 To get more information on how to use `firestarter`, you can read the documentation in the [`./docs`](https://github.com/dishb/firestarter/tree/main/docs) directory.

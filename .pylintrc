@@ -31,4 +31,5 @@ ignore-paths = setup.py
 disable = too-few-public-methods,
           too-many-branches,
           too-many-statements,
-          too-many-locals
+          too-many-locals,
+          duplicate-code

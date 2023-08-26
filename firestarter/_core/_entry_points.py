@@ -163,11 +163,10 @@ SOFTWARE
             file.write(GITIGNORE)
             file.close()
 
-    match project:
-        case "blank":
-            _create_blank(root_dir)
-        case "package":
-            _create_package(root_dir, name)
+    if project == "blank":
+        _create_blank(root_dir)
+    elif project == "package":
+        _create_package(root_dir, name)
 
     core_dir = root_dir / "core"
     print(_Labels.INFO + f"Creating directory: {core_dir}")
