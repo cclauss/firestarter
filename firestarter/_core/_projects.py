@@ -33,7 +33,7 @@ Source: https://github.com/dishb/firestarter
 from pathlib import Path
 from os import mkdir
 
-from ._files import BLANK_MAIN, DIST_REQS, INIT
+from ._files import BLANK_MAIN, DIST_REQS, INIT, SETUP_PY
 from ._labels import _Labels
 
 def _create_package(root_dir: Path, name: str) -> None:
@@ -66,6 +66,12 @@ def _create_package(root_dir: Path, name: str) -> None:
     mkdir(root_dir / "tests")
     with open(root_dir / "tests" / "__init__.py", "x", encoding = "utf-8") as file:
         file.write(INIT)
+        file.close()
+
+    print(_Labels.INFO + "Creating file: setup.py")
+
+    with open(root_dir / "setup.py", "x", encoding = "utf-8") as file:
+        file.write(SETUP_PY)
         file.close()
 
 def _create_blank(root_dir: Path) -> None:
