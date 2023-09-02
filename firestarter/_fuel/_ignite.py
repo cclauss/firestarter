@@ -59,11 +59,15 @@ def _ignite(fuel: Path) -> int:
         template.close()
 
     lines = content.split("\n")
-    for line in lines:
-        line = line.split(" ")
-        line_num = lines.index(line) + 1
 
-        if line[0] == "[name]":
+    for index, line in enumerate(lines):
+        line = line.split(" ")
+        line_num = index + 1
+
+        if line[0] in ["", " ", "$"]:
+            pass
+
+        elif line[0] == "[name]":
             name = line[2]
 
         elif line[0] == "[git]":
@@ -73,7 +77,7 @@ def _ignite(fuel: Path) -> int:
                 git = False
             else:
                 print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [git].")
-                print("Please read the documentation to learn more.")
+                print("Please read the documentation to learn more.\n")
                 return 1
 
         elif line[0] == "[path]":
@@ -82,7 +86,7 @@ def _ignite(fuel: Path) -> int:
         elif line[0] == "[project-type]":
             if line[2] not in ["blank", "package"]:
                 print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [project-type].")
-                print("Please read the documentation to learn more.")
+                print("Please read the documentation to learn more.\n")
                 return 1
 
             project = line[2]
@@ -90,7 +94,7 @@ def _ignite(fuel: Path) -> int:
         elif line[0] == "[test-framework]":
             if line[2] not in ["pytest", "unittest", "none"]:
                 print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [test-framework].")
-                print("Please read the documentation to learn more.")
+                print("Please read the documentation to learn more.\n")
                 return 1
 
             test_framework = line[2]
@@ -98,20 +102,20 @@ def _ignite(fuel: Path) -> int:
         elif line[0] == "[linter]":
             if line[2] not in ["pylint", "flake8", "black", "bandit", "none"]:
                 print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [linter].")
-                print("Please read the documentation to learn more.")
+                print("Please read the documentation to learn more.\n")
                 return 1
 
             linter = line[2]
 
         else:
             print(_Labels.ERROR + f"Line {line_num}: Incorrect header.")
-            print("Please read the documentation to learn more.")
+            print("Please read the documentation to learn more.\n")
             return 1
 
     root_dir = Path(path) / name
     if os.path.exists(root_dir):
         print(_Labels.ERROR + f"{root_dir} already exists.")
-        print("Please read the documentation to learn more.")
+        print("Please read the documentation to learn more.\n")
         return 1
 
     os.mkdir(root_dir)
@@ -123,7 +127,7 @@ def _ignite(fuel: Path) -> int:
         python_cmd = "python"
     else:
         print(_Labels.ERROR + f"{system()} is not a supported operating system.")
-        print("Please read the documentation to learn more.")
+        print("Please read the documentation to learn more.\n")
         return 1
 
     venv_path = root_dir / ".venv"

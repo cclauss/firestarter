@@ -1,11 +1,11 @@
 $ comment
 $ [option] :: value
-$ :: are used to denote a seperation
-$ [] are used to denote an option
+$ :: is called a seperator
+$ [option] is called a header
 
 [name] :: name
 [path] :: /Users/dishb/Coding/
 [git] :: y
-[project-type] :: blank
+[project-type] :: package
 [test-framework] :: pytest
 [linter] :: pylint
