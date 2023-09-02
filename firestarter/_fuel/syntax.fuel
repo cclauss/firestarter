@@ -1,0 +1,11 @@
+$ comment
+$ [option] :: value
+$ :: are used to denote a seperation
+$ [] are used to denote an option
+
+[name] :: name
+[path] :: /Users/dishb/Coding/
+[git] :: y
+[project-type] :: blank
+[test-framework] :: pytest
+[linter] :: pylint

@@ -38,6 +38,7 @@ from platform import system
 
 from colorama import init, deinit
 
+from .._fuel import _ignite
 from ._labels import _Labels
 from ._files import GITIGNORE, INIT
 from ._projects import _create_blank, _create_package
@@ -52,7 +53,8 @@ def _console() -> int:
 
     init(autoreset = True)
 
-    description = ""
+    description = """description: a cross-platform CLI to help you jump right into developing
+projects with Python."""
 
     parser = ArgumentParser(prog = "firestarter",
                             description = description,
@@ -68,6 +70,14 @@ def _console() -> int:
                         help = "print the license/full copyright of firestarter.",
                         required = False,
                         dest = "license"
+                        )
+    parser.add_argument("-f", "--fuel",
+                        nargs = 1,
+                        action = "store",
+                        help = "use a fuel template to create a project.",
+                        required = False,
+                        dest = "fuel",
+                        metavar = "PATH TO TEMPLATE"
                         )
 
     args = parser.parse_args()
@@ -103,6 +113,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE
 """
              )
+        return 0
+
+    if args.fuel:
+        fuel_template = Path(args.fuel[0])
+        _ignite(fuel_template)
+
         return 0
 
     if system().lower() in ["darwin", "linux"]:
