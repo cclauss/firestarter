@@ -50,9 +50,9 @@ def _ignite(fuel: Path) -> None:
         file (Path): The file path to the fuel template.
     """
 
-    with open(fuel, "r", encoding = "utf-8") as fuel:
-        content = fuel.read()
-        fuel.close()
+    with open(fuel, "r", encoding = "utf-8") as template:
+        content = template.read()
+        template.close()
 
     lines = content.split("\n")
     for line in lines:
