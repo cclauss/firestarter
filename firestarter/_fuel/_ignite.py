@@ -39,15 +39,19 @@ from colorama import Fore, Style
 
 from .._core._files import GITIGNORE, INIT
 from .._core._projects import _create_blank, _create_package
+from .._core._labels import _Labels
 
 ACTION = "\n[" + Fore.GREEN + "action" + Style.RESET_ALL +  "] "
 
-def _ignite(fuel: Path) -> None:
+def _ignite(fuel: Path) -> int:
     """
     Parses a fuel template (file) and creates a project with firestarter.
 
     Args:
         file (Path): The file path to the fuel template.
+
+    Returns:
+        int: The exit code.
     """
 
     with open(fuel, "r", encoding = "utf-8") as template:
@@ -57,6 +61,8 @@ def _ignite(fuel: Path) -> None:
     lines = content.split("\n")
     for line in lines:
         line = line.split(" ")
+        line_num = lines.index(line) + 1
+
         if line[0] == "[name]":
             name = line[2]
 
@@ -66,32 +72,47 @@ def _ignite(fuel: Path) -> None:
             elif line[2].lower() in ["no", "n"]:
                 git = False
             else:
-                print("error")
+                print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [git].")
+                print("Please read the documentation to learn more.")
+                return 1
 
         elif line[0] == "[path]":
             path = Path(line[2])
 
         elif line[0] == "[project-type]":
             if line[2] not in ["blank", "package"]:
-                print("error")
-            else:
-                project = line[2]
+                print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [project-type].")
+                print("Please read the documentation to learn more.")
+                return 1
+
+            project = line[2]
 
         elif line[0] == "[test-framework]":
             if line[2] not in ["pytest", "unittest", "none"]:
-                print("error")
-            else:
-                test_framework = line[2]
+                print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [test-framework].")
+                print("Please read the documentation to learn more.")
+                return 1
+
+            test_framework = line[2]
 
         elif line[0] == "[linter]":
             if line[2] not in ["pylint", "flake8", "black", "bandit", "none"]:
-                print("error")
-            else:
-                linter = line[2]
+                print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [linter].")
+                print("Please read the documentation to learn more.")
+                return 1
+
+            linter = line[2]
+
+        else:
+            print(_Labels.ERROR + f"Line {line_num}: Incorrect header.")
+            print("Please read the documentation to learn more.")
+            return 1
 
     root_dir = Path(path) / name
     if os.path.exists(root_dir):
-        print("error")
+        print(_Labels.ERROR + f"{root_dir} already exists.")
+        print("Please read the documentation to learn more.")
+        return 1
 
     os.mkdir(root_dir)
     os.chdir(root_dir)
@@ -101,7 +122,9 @@ def _ignite(fuel: Path) -> None:
     elif system().lower() == "windows":
         python_cmd = "python"
     else:
-        print("error")
+        print(_Labels.ERROR + f"{system()} is not a supported operating system.")
+        print("Please read the documentation to learn more.")
+        return 1
 
     venv_path = root_dir / ".venv"
     run([python_cmd, "-m", "venv", venv_path], check = True, stdout = PIPE)
@@ -136,3 +159,5 @@ def _ignite(fuel: Path) -> None:
         with open(root_dir / ".pylintrc", "x", encoding = "utf-8") as file:
             file.write("")
             file.close()
+
+    return 0

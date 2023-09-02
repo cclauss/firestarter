@@ -117,9 +117,8 @@ SOFTWARE
 
     if args.fuel:
         fuel_template = Path(args.fuel[0])
-        _ignite(fuel_template)
 
-        return 0
+        return _ignite(fuel_template)
 
     if system().lower() in ["darwin", "linux"]:
         python_cmd = "python3"

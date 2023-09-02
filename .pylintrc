@@ -32,4 +32,5 @@ disable = too-few-public-methods,
           too-many-branches,
           too-many-statements,
           too-many-locals,
-          duplicate-code
+          duplicate-code,
+          too-many-return-statements
