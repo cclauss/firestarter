@@ -35,13 +35,9 @@ from pathlib import Path
 from subprocess import run, PIPE
 from platform import system
 
-from colorama import Fore, Style
-
 from .._core._files import GITIGNORE, INIT
 from .._core._projects import _create_blank, _create_package
 from .._core._labels import _Labels
-
-ACTION = "\n[" + Fore.GREEN + "action" + Style.RESET_ALL +  "] "
 
 def _ignite(fuel: Path) -> int:
     """
@@ -53,6 +49,10 @@ def _ignite(fuel: Path) -> int:
     Returns:
         int: The exit code.
     """
+
+    if not str(fuel).endswith(".fuel"):
+        print(_Labels.ERROR + f"{fuel} needs to be a fuel template file (ending in .fuel).")
+        return 1
 
     with open(fuel, "r", encoding = "utf-8") as template:
         content = template.read()
@@ -76,7 +76,7 @@ def _ignite(fuel: Path) -> int:
             elif line[2].lower() in ["no", "n"]:
                 git = False
             else:
-                print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [git].")
+                print(_Labels.ERROR + f"Line {line_num}: Invalid value for [git].")
                 print("Please read the documentation to learn more.\n")
                 return 1
 
@@ -85,7 +85,7 @@ def _ignite(fuel: Path) -> int:
 
         elif line[0] == "[project-type]":
             if line[2] not in ["blank", "package"]:
-                print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [project-type].")
+                print(_Labels.ERROR + f"Line {line_num}: Invalid value for [project-type].")
                 print("Please read the documentation to learn more.\n")
                 return 1
 
@@ -93,7 +93,7 @@ def _ignite(fuel: Path) -> int:
 
         elif line[0] == "[test-framework]":
             if line[2] not in ["pytest", "unittest", "none"]:
-                print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [test-framework].")
+                print(_Labels.ERROR + f"Line {line_num}: Invalid value for [test-framework].")
                 print("Please read the documentation to learn more.\n")
                 return 1
 
@@ -101,21 +101,20 @@ def _ignite(fuel: Path) -> int:
 
         elif line[0] == "[linter]":
             if line[2] not in ["pylint", "flake8", "black", "bandit", "none"]:
-                print(_Labels.ERROR + f"Line {line_num}: Incorrect value for [linter].")
+                print(_Labels.ERROR + f"Line {line_num}: Invalid value for [linter].")
                 print("Please read the documentation to learn more.\n")
                 return 1
 
             linter = line[2]
 
         else:
-            print(_Labels.ERROR + f"Line {line_num}: Incorrect header.")
+            print(_Labels.ERROR + f"Line {line_num}: Invalid header.")
             print("Please read the documentation to learn more.\n")
             return 1
 
     root_dir = Path(path) / name
     if os.path.exists(root_dir):
         print(_Labels.ERROR + f"{root_dir} already exists.")
-        print("Please read the documentation to learn more.\n")
         return 1
 
     os.mkdir(root_dir)
