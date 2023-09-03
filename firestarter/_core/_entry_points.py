@@ -193,6 +193,14 @@ SOFTWARE
         file.write(INIT)
         file.close()
 
+    utils_dir = root_dir / "utils"
+    print(_Labels.INFO + f"Creating directory: {utils_dir}")
+
+    os.mkdir(utils_dir)
+    with open(utils_dir / "__init__.py", "x", encoding = "utf-8") as file:
+        file.write(INIT)
+        file.close()
+
     print(_Labels.INFO + "Creating file: dev-requirements.txt")
 
     with open(root_dir / "dev-requirements.txt", "x", encoding = "utf-8") as file:
