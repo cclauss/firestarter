@@ -33,15 +33,10 @@ Source: https://github.com/dishb/firestarter
 import os
 from argparse import ArgumentParser
 from pathlib import Path
-from subprocess import run, PIPE
 from platform import system
-
-from colorama import init, deinit
 
 from .._fuel import _ignite
 from ._labels import _Labels
-from ._files import GITIGNORE, INIT
-from ._projects import _create_blank, _create_package
 
 def _console() -> int:
     """
@@ -50,8 +45,6 @@ def _console() -> int:
     Returns:
         int: The exit code.
     """
-
-    init(autoreset = True)
 
     description = """description: a cross-platform CLI to help you jump right into developing
 projects with Python."""
@@ -120,13 +113,7 @@ SOFTWARE
 
         return _ignite(fuel_template)
 
-    if system().lower() in ["darwin", "linux"]:
-        python_cmd = "python3"
-        pip_cmd = "pip3"
-    elif system().lower() == "windows":
-        python_cmd = "python"
-        pip_cmd = "pip"
-    else:
+    if system().lower() not in ["darwin", "linux", "windows"]:
         print(_Labels.ERROR +
               f"\n{system()} is not supported. Please use Linux, Windows, or macOS.\n"
               )
@@ -159,86 +146,24 @@ SOFTWARE
     while linter.lower() not in ["pylint", "flake8", "black", "bandit", "none"]:
         linter = input(_Labels.INIT + "Linter (pylint, flake8, black, bandit, none): ")
 
-    print(_Labels.INFO + "Creating project directory.")
+    temp_dir = Path("./.firestarter/")
+    if not os.path.exists(temp_dir):
+        os.mkdir(temp_dir)
 
-    os.mkdir(root_dir)
-    os.chdir(root_dir)
-
-    print(_Labels.INFO + "Creating virtual environment.")
-
-    venv_path = root_dir / ".venv"
-    run([python_cmd, "-m", "venv", venv_path], check = True, stdout = PIPE)
-
-    if git.lower() in ["y", "yes"]:
-        print(_Labels.INFO + "Initializing a git repository.")
-
-        run(["git", "init", root_dir], stdout = PIPE, text = True, check = True)
-
-        print(_Labels.INFO + "Creating file: .gitignore")
-
-        with open(root_dir / ".gitignore", "x", encoding = "utf-8") as file:
-            file.write(GITIGNORE)
-            file.close()
-
-    if project == "blank":
-        _create_blank(root_dir)
-    elif project == "package":
-        _create_package(root_dir, name)
-
-    core_dir = root_dir / "core"
-    print(_Labels.INFO + f"Creating directory: {core_dir}")
-
-    os.mkdir(core_dir)
-    with open(core_dir / "__init__.py", "x", encoding = "utf-8") as file:
-        file.write(INIT)
-        file.close()
-
-    utils_dir = root_dir / "utils"
-    print(_Labels.INFO + f"Creating directory: {utils_dir}")
-
-    os.mkdir(utils_dir)
-    with open(utils_dir / "__init__.py", "x", encoding = "utf-8") as file:
-        file.write(INIT)
-        file.close()
-
-    print(_Labels.INFO + "Creating file: dev-requirements.txt")
-
-    with open(root_dir / "dev-requirements.txt", "x", encoding = "utf-8") as file:
-        if linter != "none":
-            file.write(linter)
-        if test_framework not in ["unittest", "none"]:
-            file.write(test_framework)
-        file.close()
-
-    if linter == "pylint":
-        print(_Labels.INFO + "Creating file: .pylintrc")
-        with open(root_dir / ".pylintrc", "x", encoding = "utf-8") as file:
-            file.write("")
-            file.close()
-
-    print(_Labels.ACTION + f"Change to the project directory: cd {root_dir}")
-
-    if system().lower() in ["darwin", "linux"]:
-        print(_Labels.ACTION + "Activate the virtual environment: source ./.venv/bin/activate")
+    template_file = temp_dir / ".firestarter_temp.fuel"
+    if os.path.exists(template_file):
+        mode = "w"
     else:
-        print(_Labels.ACTION +
-              "Activate the virtual environment: .\\.venv\\Scripts\\activate.bat"
-              )
+        mode = "x"
 
-    req_file = root_dir / "requirements.txt"
-    dev_req_file = root_dir / "dev-requirements.txt"
-    print(_Labels.ACTION + "Install the dependencies:" +
-          f"\n{pip_cmd} install {req_file}" +
-          f"\n{pip_cmd} install {dev_req_file}"
-          )
+    with open(template_file, mode, encoding = "utf-8") as file:
+        file.write(f"""[name] :: {name}
+[path] :: {path}
+[git] :: {git}
+[project-type] :: {project}
+[test-framework] :: {test_framework}
+[linter] :: {linter}
+"""
+                  )
 
-    if project == "package":
-        dist_req_file = root_dir / "dist-requirements.txt"
-        print(f"{pip_cmd} install {dist_req_file}")
-
-        print(_Labels.ACTION + f"Install the package in editable mode: {pip_cmd} install -e .")
-
-    print("")
-
-    deinit()
-    return 0
+    return _ignite(template_file)
