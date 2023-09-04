@@ -76,7 +76,7 @@ projects with Python."""
     args = parser.parse_args()
 
     if args.version:
-        print("\nfirestarter: v0.0.1\n")
+        print("\nfirestarter: v0.0.2\n")
         return 0
 
     if args.license:

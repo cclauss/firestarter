@@ -24,7 +24,7 @@
 
 from setuptools import setup
 
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 DESCRIPTION = "A cross-platform CLI to help you jump right into developing projects with Python."
 
 with open("README.md", "r", encoding = "utf-8") as file:
