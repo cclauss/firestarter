@@ -30,6 +30,7 @@ This is the documentation for `firestarter`'s CLI.
 
 | Argument | Alias | Functionality | Usage |
 | --- | --- | --- | --- |
-| --help | -h | Print a simple help message. | `monstera --help` |
+| --help | -h | Print a simple help message. | `firestarter --help` |
 | --version | -v | Print the version of `firestarter`. | `firestarter --version` |
 | --copyright | -c | Print the license/full copyright of `firestarter`. | `firestarter --copyright` |
+| --fuel | -f | Use a `fuel` template to configure `firestarter`. | `firestarter --fuel FILE_PATH` |
