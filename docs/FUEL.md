@@ -78,3 +78,19 @@ These are all the options for `firestarter` and their descriptions. The order th
 | `test-framework` | The framework (a Python package) that will be used for testing. Must be one of the following: pytest, unittest, none. |
 | `linter` | The linter used in the project. Must be one of the following: pylint, flake8, bandit, black, none. |
 
+## Example:
+Here is an example `fuel` file:
+
+```
+$ example fuel template
+$ used by firestarter
+
+[name] :: python-project
+[project-type] :: blank
+[path] :: .
+[git] :: y
+[test-framework] :: pytest
+[linter] :: pylint
+```
+
+When run through `firestarter`, a folder with the name `python-project` will be created. Inside that root folder will be a `tests` folder, a `.git` folder (created when `git` is initialized), and a blank `requirements.txt` file. The root folder will exist in whatever path the `firestarter` command was run from (in the shell). A `dev-requirements.txt` file will be created with `pylint` and `pytest` on seperate lines.
