@@ -133,7 +133,7 @@ SOFTWARE
 
     git = ""
     while git.lower() not in ["y", "n", "yes", "no"]:
-        git = input(_Labels.INIT + "Do you want to initialize a git repository? (y/n) ")
+        git = input(_Labels.INIT + "Do you want to initialize a git repository? (Y/n) ")
 
     project = ""
     while project not in ["package", "blank"]:
